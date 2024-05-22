@@ -34,4 +34,13 @@
 		"date": "11.3.2023",
 		"result_link": "data/ekg_data/03_Ruhe.txt"
 	}]
-}]
+}, {
+	"id": 4,
+	"date_of_birth": 1998,
+	"firstname": "Tobias",
+	"lastname": "Gasteiger",
+    "picture_path" : "",
+	"ekg_tests": [{
+	}]
+}
+]
