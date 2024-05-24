@@ -26,8 +26,8 @@ def page():
         # zone_times = zone_time(df)
         st.markdown('##### Zonen Analyse:')
         combined_df = analyze_data(df)
-        combined_df['PowerZone'] = combined_df.index  # Index in Spalte umwandeln
-        st.write(combined_df.drop(columns=['PowerZone']))
+        st.write(combined_df.reset_index(drop=True))
+
     # with col3:
     #     awg_power = avg_power_in_zone(df)
         
