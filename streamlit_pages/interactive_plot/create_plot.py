@@ -3,8 +3,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-
 def create_plot(csv_path, max_heartrate):
+    
     #Read data from csv
     df = pd.read_csv(csv_path, sep=",", header=0)
 
@@ -86,6 +86,16 @@ def create_plot(csv_path, max_heartrate):
         fillcolor=zone_colors[prev_zone],
         line=dict(width=0)
     )
+    # Add legend entries for the power zones
+    for zone, color in zone_colors.items():
+        fig.add_trace(go.Scatter(
+            x=[None], y=[None],
+            mode='markers',
+            marker=dict(size=10, color=color),
+            legendgroup=f'Zone {zone}',
+            showlegend=True,
+            name=f'Zone {zone}'
+        ))
 
     # Update layout
     fig.update_layout(
