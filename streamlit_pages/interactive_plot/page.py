@@ -4,37 +4,24 @@ from streamlit_pages.interactive_plot.data_analize import zone_time, avg_power_i
 
 
 def page():
-    # Eingabefeld für eine Zahl
-    input_max_heartrate = st.number_input('Geben Sie ihre maximal gemessene Herzfrequents ein:', min_value=0, max_value=300, value=180)
 
-    # col1, col2= st.columns(2)
+    st.markdown('## Interaktiver Plot')
+    input_max_heartrate = st.slider("Geben Sie ihre maximale Herzfrequents ein:", 50, 300, 180)
     df, fig = cp.create_plot("data/activities/activity.csv", input_max_heartrate)
-    
     
     st.markdown('#### Graph')
     st.plotly_chart(fig)
 
-    
     st.markdown('#### Messwerte')
-    # Erstelle zwei Spalten
     col1, col2 = st.columns([1, 1])
-    
     with col1:
-        st.metric(label="Mittelwert Leistung", value=f"{int(df["PowerOriginal"].mean())} W", delta="1.2 °F")
-        st.metric(label="Maximalwert Leistung", value=f"{int(df["PowerOriginal"].max())} W", delta="1.2 °F")
+        st.metric(label="Mittelwert Leistung", value=f"{int(df["PowerOriginal"].mean())} W")
     with col2:
-        # zone_times = zone_time(df)
-        st.markdown('##### Zonen Analyse:')
-        combined_df = analyze_data(df)
-        st.write(combined_df.reset_index(drop=True))
-
-    # with col3:
-    #     awg_power = avg_power_in_zone(df)
-        
-
-        
-
-    return input_max_heartrate        
+        st.metric(label="Maximalwert Leistung", value=f"{int(df["PowerOriginal"].max())} W")
+    
+    st.markdown('#### Zonen Analyse')
+    combined_df = analyze_data(df)
+    st.dataframe(combined_df)                   
     
         
 

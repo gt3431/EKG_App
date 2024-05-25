@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import streamlit_pages.interactive_plot.create_plot as cp
 import streamlit as st
+
 def zone_time(df):
     # erstellen eines Dictionarys zum Zählen der verbrachten Zeit in jeder Zone
     zone_times = {}
@@ -35,7 +36,7 @@ def avg_power_in_zone(df):
 def format_time(time):
     minutes = time // 60
     seconds = time % 60
-    return f"{minutes} minute{'n' if minutes != 1 else ''} und {seconds} sekunde{'n' if seconds != 1 else ''}"
+    return f"{minutes} Minute{'n' if minutes != 1 else ''} und {seconds} Sekunde{'n' if seconds != 1 else ''}"
 
 def analyze_data(df):
     # Erstellen eines DataFrames zum Zählen der verbrachten Zeit in jeder Zone
@@ -57,6 +58,7 @@ def analyze_data(df):
     combined_df['Time'] = combined_df['Time'].apply(format_time)
     # Neu anordnen der Spalten
     combined_df = combined_df[['PowerZone', 'Time', 'Average Power in Watt']]
+    combined_df.set_index('PowerZone', inplace=True)
     return combined_df
 
 
