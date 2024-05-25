@@ -40,6 +40,10 @@ Diese Streamlit-App ermöglicht es Ihnen, Ihre Herzfrequenzdaten und EKG-daten z
      ```bash
      source venv/bin/activate
      ```
+    ### Falls ein Fehler angezeigt wird
+    ```bash
+     pip install -r requirements. txt
+     ```
 
 4. **Abhängigkeiten installieren**
 
