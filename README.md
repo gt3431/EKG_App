@@ -2,20 +2,21 @@
 
 ## Projektbeschreibung
 
-Diese Streamlit-App ermöglicht es Ihnen, Ihre Herzfrequenzdaten zu analysieren und zu visualisieren. Die Anwendung bietet folgende Funktionen:
+Diese Streamlit-App ermöglicht es Ihnen, Ihre Herzfrequenzdaten und EKG-daten zu analysieren und zu visualisieren. Die Anwendung bietet folgende Funktionen:
 
 - Eingabe der maximal gemessenen Herzfrequenz.
 - Erstellung eines interaktiven Plots der Herzfrequenz- und Leistungsdaten.
 - Anzeige der verbrachten Zeit in verschiedenen Herzfrequenzzonen.
 - Anzeige der durchschnittlichen Leistung in jeder Herzfrequenzzone.
+- Analyse der EKG-Daten
 
 ## Installation
 
 1. **Repository klonen**
 
    ```bash
-   git clone https://github.com/dein-benutzername/dein-repo.git
-   cd dein-repo
+   git clone https://github.com/gt3431/EKG_App.git
+   cd EKG_App
    ```
 
 2. **Virtuelle Umgebung erstellen**
@@ -59,28 +60,39 @@ Diese Streamlit-App ermöglicht es Ihnen, Ihre Herzfrequenzdaten zu analysieren 
 
 2. **Eingabe der maximalen Herzfrequenz**
 
-   Geben Sie die maximale gemessene Herzfrequenz in das Eingabefeld ein und sehen Sie sich die Analyse und die Visualisierungen an.
+   Passen sie ihre Maximale HF über die Slide Bar an.
 
 ## Projektstruktur
 
 ```
-streamlit-heart-rate-analysis/
+EKG_APP/
 ├── data/
 │   └── activities/
 │       └── activity.csv
 ├── streamlit_pages/
 │   ├── interactive_plot/
+│   │   ├── __init__.py
 │   │   ├── create_plot.py
 │   │   ├── data_analize.py
-│   │   └── page.py
-├── main_app.py
+│   ├── ekg/
+│   │   ├── page.py
+│   │   ├── read_data.py
+│   │   └── process_data.py
+├── main.py
 ├── requirements.txt
 └── README.md
 ```
 
 - `data/`: Enthält die CSV-Datei mit den Aktivitäten.
 - `streamlit_pages/interactive_plot/`: Enthält die Module für die Erstellung des Plots und die Datenanalyse.
-- `main_app.py`: Startpunkt der Streamlit-App.
+  - `__init__.py`: Initialisierungsdatei für das Paket.
+  - `create_plot.py`: Modul zur Erstellung des Plots.
+  - `data_analize.py`: Modul zur Datenanalyse.
+- `streamlit_pages/ekg/`: Enthält Module zur Verarbeitung und Darstellung von EKG-Daten.
+  - `page.py`: Modul zur Darstellung der EKG-Seite.
+  - `read_data.py`: Modul zum Einlesen der EKG-Daten.
+  - `process_data.py`: Modul zur Verarbeitung der EKG-Daten.
+- `main.py`: Startpunkt der Streamlit-App.
 - `requirements.txt`: Liste der Python-Pakete, die für das Projekt benötigt werden.
 - `README.md`: Diese Datei.
 
@@ -94,47 +106,7 @@ pandas
 plotly
 ```
 
-## Beispiel-Code
-
-### `main_app.py`
-
-```python
-import streamlit as st
-import streamlit_pages.interactive_plot.create_plot as cp
-from streamlit_pages.interactive_plot.data_analize import analyze_data
-
-def page():
-    # Eingabefeld für eine Zahl
-    input_max_heartrate = st.number_input('Geben Sie ihre maximal gemessene Herzfrequenz ein:', min_value=0, max_value=300, value=180)
-
-    # Erstellen des Plots und DataFrames
-    df, fig = cp.create_plot("data/activities/activity.csv", input_max_heartrate)
-    
-    st.markdown('#### Graph')
-    st.plotly_chart(fig)
-
-    st.markdown('#### Messwerte')
-    # Erstelle zwei Spalten
-    col1, col2 = st.columns([1, 3])
-    
-    with col1:
-        st.metric(label="Mittelwert Leistung", value=f"{int(df['PowerOriginal'].mean())} W")
-        st.metric(label="Maximalwert Leistung", value=f"{int(df['PowerOriginal'].max())} W")
-    
-    with col2:
-        combined_df = analyze_data(df)
-        combined_df.set_index('PowerZone', inplace=True)
-        selected_columns = combined_df[['Time', 'Average Power']]
-        st.table(selected_columns)
-
-if __name__ == "__main__":
-    page()
-```
 
 ## Lizenz
 
-Dieses Projekt steht unter der MIT-Lizenz. Weitere Informationen finden Sie in der LICENSE-Datei.
-
----
-
-Passe die README-Datei nach Bedarf an, insbesondere den Abschnitt "Projektbeschreibung" und "Projektstruktur", um sicherzustellen, dass alle relevanten Informationen und Dateipfade korrekt sind.
+Die verwendeten Daten wurden vom MCI bereitgestellt und der Code wurde von Tobias Gasteiger und Lucas Franke erstellt und steht zur freien verfügung.
