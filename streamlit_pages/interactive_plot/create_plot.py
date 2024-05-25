@@ -40,7 +40,7 @@ def create_plot(csv_path, max_heartrate):
     # Define the zones and colors
     zone_colors = {
         1: 'rgba(0, 255, 0, 0.2)',    # Green
-        2: 'rgba(255, 255, 0, 0.2)',  # Yellow
+        2: 'rgba(255, 255, 0, 0.2)',  # Yellow  
         3: 'rgba(255, 165, 0, 0.2)',  # Orange
         4: 'rgba(255, 0, 0, 0.2)',    # Red
         5: 'rgba(0, 0, 255, 0.2)'     # Blue

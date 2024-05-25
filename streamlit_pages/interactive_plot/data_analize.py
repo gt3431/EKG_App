@@ -20,6 +20,7 @@ def zone_time(df):
             st.write(f"Verbrachte Zeit in Zone {zone}: {minuten} Minute/n und {restsekunden} Sekunde/n")
         else:
             st.write(f"Verbrachte Zeit vor den Zonen: {minuten} Minute/n und {restsekunden} Sekunde/n")
+    
 
 
 def avg_power_in_zone(df):
@@ -57,6 +58,7 @@ def analyze_data(df):
     combined_df['Time'] = combined_df['Time'].apply(format_time)
     # Neu anordnen der Spalten
     combined_df = combined_df[['PowerZone', 'Time', 'Average Power in Watt']]
+    print("times:", zone_times)
     return combined_df
 
 

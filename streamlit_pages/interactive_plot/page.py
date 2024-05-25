@@ -20,7 +20,7 @@ def page():
     col1, col2 = st.columns([1, 1])
     
     with col1:
-        st.metric(label="Mittelwert Leistung", value=f"{int(df["PowerOriginal"].mean())} W", delta="1.2 °F")
+        st.metric(label="Mittelwert Leistung", value=f"{int(df["PowerOriginal"].mean())} W", delta="5 x Cooler")
         st.metric(label="Maximalwert Leistung", value=f"{int(df["PowerOriginal"].max())} W", delta="1.2 °F")
     with col2:
         # zone_times = zone_time(df)
