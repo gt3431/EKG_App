@@ -21,7 +21,11 @@ def page():
     
     st.markdown('#### Zonen Analyse')
     combined_df = analyze_data(df)
-    st.dataframe(combined_df)                   
+    # Setze "PowerZone" als Index
+    combined_df.set_index('PowerZone', inplace=True)
+    st.write(combined_df)
+    print(combined_df)
+    print(combined_df.reset_index(drop=True))                   
     
         
 
