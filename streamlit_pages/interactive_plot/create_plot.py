@@ -2,6 +2,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import math
 
 def create_plot(csv_path, max_heartrate):
     
@@ -9,7 +10,7 @@ def create_plot(csv_path, max_heartrate):
     df = pd.read_csv(csv_path, sep=",", header=0)
 
     # Definiere die Prozentbereiche für die Leistungszonen
-    zone_ranges = [(0, 60), (60, 70), (70, 80), (80, 90), (90, 100)]
+    zone_ranges = [(-math.inf, 60), (60, 70), (70, 80), (80, 90), (90, math.inf)]
 
     # Berechne die Grenzen für die Leistungszonen basierend auf dem maximalen Herzfrequenzwert und den Prozentbereichen
     # durch 100 da wir ganze prozentzahlen haben -> ersetzen die werde der zone_ranges 
@@ -32,18 +33,18 @@ def create_plot(csv_path, max_heartrate):
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     # Füge die Power-Daten zum Diagramm hinzu
-    fig.add_trace(go.Scatter(x=df.index, y=df['PowerOriginal'], mode='lines', name='Power'), secondary_y=False)
+    fig.add_trace(go.Scatter(x=df.index, y=df['PowerOriginal'], mode='lines', name='Leistung [W]'), secondary_y=False)
 
     # Füge die Heartrate-Daten zum Diagramm hinzu
-    fig.add_trace(go.Scatter(x=df.index, y=df['HeartRate'], mode='lines', name='HeartRate'), secondary_y=True)
+    fig.add_trace(go.Scatter(x=df.index, y=df['HeartRate'], mode='lines', name='Puls [bpm]'), secondary_y=True)
 
     # Define the zones and colors
     zone_colors = {
-        1: 'rgba(0, 255, 0, 0.2)',    # Green
-        2: 'rgba(255, 255, 0, 0.2)',  # Yellow  
-        3: 'rgba(255, 165, 0, 0.2)',  # Orange
-        4: 'rgba(255, 0, 0, 0.2)',    # Red
-        5: 'rgba(0, 0, 255, 0.2)'     # Blue
+        1: 'rgba(117,247,8,0.2)',    # Green
+        2: 'rgba(255,248,76,0.2)',  # Yellow
+        3: 'rgba(255,152,7,0.2)',  # Orange
+        4: 'rgba(248,16,42,0.2)',    # Red
+        5: 'rgba(150,7,53,0.2)'     # Dark Red
     }
 
     # Add shapes for each powerzone segment
@@ -99,13 +100,21 @@ def create_plot(csv_path, max_heartrate):
 
     # Update layout
     fig.update_layout(
-        title='Heartrate and Power with Powerzone Background',
-        xaxis_title='Index',
-        yaxis_title='Value',
+        title='Herzrate mit Leistung und eigefärbtem Zonenhintergrund',
+        xaxis_title='Zeit [s]',
+        yaxis_title='Leistung [W]',
         yaxis=dict(
             range=[0, max(df['HeartRate'].max(), df['PowerOriginal'].max()) + 10]
-        )
-    )
+        ),
+        legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="right",
+        x=1
+    ))
+    fig.update_yaxes(title_text="Puls [bpm]", secondary_y=True)
+
 
     # Diagramm zurückgeben
     return df, fig

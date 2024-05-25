@@ -20,7 +20,7 @@ def zone_time(df):
             st.write(f"Verbrachte Zeit in Zone {zone}: {minuten} Minute/n und {restsekunden} Sekunde/n")
         else:
             st.write(f"Verbrachte Zeit vor den Zonen: {minuten} Minute/n und {restsekunden} Sekunde/n")
-    
+    return zone_times
 
 
 def avg_power_in_zone(df):
