@@ -24,7 +24,7 @@ Diese Streamlit-App ermöglicht es Ihnen, Ihre Herzfrequenzdaten und EKG-daten z
    Erstelle eine virtuelle Umgebung, um Abhängigkeiten zu isolieren.
 
    ```bash
-   python -m venv venv
+   python -m venv .venv
    ```
 
 3. **Virtuelle Umgebung aktivieren**
