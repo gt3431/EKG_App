@@ -40,10 +40,6 @@ Diese Streamlit-App ermöglicht es Ihnen, Ihre Herzfrequenzdaten und EKG-daten z
      ```bash
      source venv/bin/activate
      ```
-    ### Falls ein Fehler angezeigt wird
-    ```bash
-     pip install -r requirements. txt
-     ```
 
 4. **Abhängigkeiten installieren**
 
@@ -59,7 +55,7 @@ Diese Streamlit-App ermöglicht es Ihnen, Ihre Herzfrequenzdaten und EKG-daten z
 1. **Starten der Streamlit-App**
 
    ```bash
-   streamlit run path/to/your/main_app.py
+   streamlit run main_app.py
    ```
 
 2. **Eingabe der maximalen Herzfrequenz**
@@ -99,17 +95,6 @@ EKG_APP/
 - `main.py`: Startpunkt der Streamlit-App.
 - `requirements.txt`: Liste der Python-Pakete, die für das Projekt benötigt werden.
 - `README.md`: Diese Datei.
-
-## Anforderungen
-
-Stelle sicher, dass folgende Pakete in der `requirements.txt` enthalten sind:
-
-```
-streamlit
-pandas
-plotly
-```
-
 
 ## Lizenz
 
