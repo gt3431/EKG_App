@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_pages.ekg.page import page as ekg_page
+from streamlit_pages.ekg.page_2 import page as ekg_page
 from streamlit_pages.interactive_plot.page import page as interactive_plot_page
 
 if __name__ == "__main__":
