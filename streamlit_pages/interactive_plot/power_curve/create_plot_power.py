@@ -4,6 +4,7 @@ import plotly.graph_objects as go
 import math
 import numpy as np
 
+
 df = pd.read_csv('data/activities/activity.csv', encoding='utf-8',sep = ",", header=0, skiprows=[1])
 power_data = df['PowerOriginal'][10:300]
 def maxtime_spend_in_power(power_series, power):
@@ -41,7 +42,6 @@ def create_plot_power():
     fig.add_trace(go.Scatter(
         y=df["Leistung"],
         x=df["Maximale Zeit"],
-        mode='lines+markers',
         name='Power Curve'
     ))
     fig.update_layout(
