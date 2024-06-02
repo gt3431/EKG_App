@@ -5,16 +5,12 @@ import math
 import numpy as np
 
 
-df = pd.read_csv('data/activities/activity.csv', encoding='utf-8',sep = ",", header=0, skiprows=[1])
-power_data = df['PowerOriginal'][10:300]
 def maxtime_spend_in_power(power_series, power):
-    
-    
     last_index = 0
     series_list = [0]
 
-    max_power = power_data.max()
-    power_data_cut = power_data[power_data>max_power-power]
+    max_power = power_series.max()
+    power_data_cut = power_series[power_series>max_power-power]
 
     for index, value in power_data_cut.items():
         if last_index and last_index == index - 1:
@@ -25,23 +21,21 @@ def maxtime_spend_in_power(power_series, power):
 
     return max(series_list)
 
-def sort_max_time(resolution):
-    # resolution = 1
+def create_power_curve(power_series, time_beween_samples=1, resolution_watts=1, ):
     data = []
-    for p in range(0, power_data.max(), resolution):
-        data.append([power_data.max()-p, maxtime_spend_in_power(power_data, p)])
+    for p in range(0, power_series.max(), resolution_watts):
+        data.append([power_series.max()-p, maxtime_spend_in_power(power_series, p) * time_beween_samples])
         #print(f"Max time spend in {power_data.max()-p}W: {maxtime_spend_in_power(power_data, p)}")
 
     df = pd.DataFrame(data, columns=['Leistung', 'Maximale Zeit'])
     return df
 
 
-def create_plot_power():
+def create_plot_power_curve(power_curve_df):
     fig = go.Figure()
-    df = sort_max_time(1)
     fig.add_trace(go.Scatter(
-        y=df["Leistung"],
-        x=df["Maximale Zeit"],
+        y=power_curve_df["Leistung"],
+        x=power_curve_df["Maximale Zeit"],
         name='Power Curve'
     ))
     fig.update_layout(
