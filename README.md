@@ -58,44 +58,6 @@ Diese Streamlit-App ermöglicht es Ihnen, Ihre Herzfrequenzdaten und EKG-daten z
    streamlit run main.py
    ```
 
-2. **Eingabe der maximalen Herzfrequenz**
-
-   Passen sie ihre Maximale HF über die Slide Bar an.
-
-## Projektstruktur
-
-```
-EKG_APP/
-├── data/
-│   └── activities/
-│       └── activity.csv
-├── streamlit_pages/
-│   ├── interactive_plot/
-│   │   ├── __init__.py
-│   │   ├── create_plot.py
-│   │   ├── data_analize.py
-│   ├── ekg/
-│   │   ├── page.py
-│   │   ├── read_data.py
-│   │   └── process_data.py
-├── main.py
-├── requirements.txt
-└── README.md
-```
-
-- `data/`: Enthält die CSV-Datei mit den Aktivitäten.
-- `streamlit_pages/interactive_plot/`: Enthält die Module für die Erstellung des Plots und die Datenanalyse.
-  - `__init__.py`: Initialisierungsdatei für das Paket.
-  - `create_plot.py`: Modul zur Erstellung des Plots.
-  - `data_analize.py`: Modul zur Datenanalyse.
-- `streamlit_pages/ekg/`: Enthält Module zur Verarbeitung und Darstellung von EKG-Daten.
-  - `page.py`: Modul zur Darstellung der EKG-Seite.
-  - `read_data.py`: Modul zum Einlesen der EKG-Daten.
-  - `process_data.py`: Modul zur Verarbeitung der EKG-Daten.
-- `main.py`: Startpunkt der Streamlit-App.
-- `requirements.txt`: Liste der Python-Pakete, die für das Projekt benötigt werden.
-- `README.md`: Diese Datei.
-
 ## Lizenz
 
 Die verwendeten Daten wurden vom MCI bereitgestellt und der Code wurde von Tobias Gasteiger und Lucas Franke erstellt und steht zur freien verfügung.
