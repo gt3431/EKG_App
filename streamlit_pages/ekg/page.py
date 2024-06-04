@@ -16,6 +16,17 @@ def page():
     if 'ekgtest' not in st.session_state:
         st.session_state.ekgtest = 'None'
 
+    "st.session_state object:" , st.session_state
+
+    def update_slider():
+        print(st.session_state.slider)
+        st.session_state.slider = (st.session_state.lower_range, st.session_state.upper_range)
+
+    def update_numin():
+        print(st.session_state.slider[0], st.session_state.lower_range)
+        st.session_state.lower_range = st.session_state.slider[0]
+        st.session_state.upper_range = st.session_state.slider[1]
+
     col1, col2 = st.columns(2)
 
     with col1:
@@ -38,9 +49,16 @@ def page():
         if st.session_state.ekgtest_name and st.session_state.ekgtest_name[1] != "Kein Test vorhanden":
             ekgtest_dict = EKGData.load_by_id(st.session_state.person.id, st.session_state.ekgtest_name[0])
             st.session_state.ekgtest = EKGData(ekgtest_dict)
-            lower = st.session_state.ekgtest.df["Zeit in ms"].min()
-            upper = int((st.session_state.ekgtest.df["Zeit in ms"].max() - lower))
-            range_ekg = st.slider("Anzeigende Werte aus Messwerte", 0, upper, (2500, 3500))
+            lower = st.session_state.ekgtest.df["Zeit in ms"].min() / 1000
+            upper = int((st.session_state.ekgtest.df["Zeit in ms"].max() / 1000 - lower))
+            range_ekg = (300, 310)
+            st.write("#### Messwertbereich auswählen")
+            low, upp = st.columns(2)
+            with low:
+                lower_range = st.number_input("Lower", value=295, key="lower_range", on_change = update_slider)
+            with upp:
+                upper_range = st.number_input("Upper", value=305, key="upper_range", on_change = update_slider)
+            range_ekg = st.slider("_", 0, upper, (lower_range, upper_range), key="slider", on_change= update_numin, label_visibility="hidden")
             st.session_state.ekgtest.find_peaks()
 
         ## Ekg Plot mit Messwerten anzeigen
@@ -55,6 +73,6 @@ def page():
             st.image(image)
             st.write(f"Name: {st.session_state.person.firstname} {st.session_state.person.lastname}")
             st.write(f"Alter: {st.session_state.person.calc_age()}")
-            st.write(f"Geburtsdatum:{st.session_state.person.date_of_birth}")
+            st.write(f"Geburtsdatum: {st.session_state.person.date_of_birth}")
 
     
