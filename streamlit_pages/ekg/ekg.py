@@ -1,4 +1,5 @@
 import pandas as pd
+import streamlit as st
 import plotly.express as px
 from streamlit_pages.ekg.person import Person
 import plotly.graph_objects as go
@@ -20,16 +21,19 @@ class EKGData:
         peaks, _ = find_peaks(x, height=height, distance=distance, prominence=prominence)
         self.peaks = peaks
 
-    def make_plot(self):
+    def make_plot(self, lower=0, upper=2000):
         # Erstellte einen Line Plot, der ersten 2000 Werte mit der Zeit auf der x-Achse
-        df_copy = self.df.copy()
-        df_copy['Zeit in s'] = df_copy['Zeit in ms'] / 1000
-        fig = px.line(df_copy.head(2000), x=("Zeit in s"), y="Messwerte in mV")
+        df = self.df.copy()
+        df['Zeit in s'] = self.df['Zeit in ms'] / 1000
+    
+        mask = (df['Zeit in s'] > lower) & (df['Zeit in s'] < upper)
+        df_selected = df.loc[mask]
+        fig = px.line(df_selected, x="Zeit in s", y="Messwerte in mV")
         # Highlight peaks if they exist
         if self.peaks is not None:
             # Restrict peaks to the first 2000 values
-            peak_df = df_copy.iloc[self.peaks]
-            peak_df = peak_df[peak_df.index < 2000]
+            peak_df = df.iloc[self.peaks]
+            peak_df = peak_df[mask]
             fig.add_trace(
                 go.Scatter(
                     x=peak_df["Zeit in s"],
