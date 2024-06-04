@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import streamlit_pages.interactive_plot.create_plot as cp
+import streamlit_pages.interactive_plot.powerzones.create_plot as cp
 import streamlit as st
 
 def zone_time(df):

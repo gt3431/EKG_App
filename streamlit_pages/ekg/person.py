@@ -61,11 +61,14 @@ class Person:
         '''Return a list of all EKG test names of the person. '''
         ekg_names = []
         ekgs = Person.load_by_id(self.id)["ekg_tests"]
+        print(ekgs)
 
-        if not ekgs:
+        if len(ekgs[0].keys()) == 0:
+            print("Kein Test vorhanden")
             return ["Kein Test vorhanden"]
         
         for ekg in ekgs:
+            print("Test vorhanden")
             name = ekg["result_link"].split("/")[-1]
             name = name.split(".")[0]
             ekg_names.append((ekg["id"], name))

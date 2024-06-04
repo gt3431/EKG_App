@@ -1,9 +1,7 @@
 import pandas as pd
 import plotly.express as px
 from streamlit_pages.ekg.person import Person
-import matplotlib.pyplot as plt
 import plotly.graph_objects as go
-from scipy.datasets import electrocardiogram
 from scipy.signal import find_peaks
 import numpy as np
 
