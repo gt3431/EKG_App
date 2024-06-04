@@ -1,4 +1,5 @@
 import pandas as pd
+import streamlit as st
 import plotly.express as px
 from streamlit_pages.ekg.person import Person
 import plotly.graph_objects as go
@@ -20,14 +21,17 @@ class EKGData:
         peaks, _ = find_peaks(x, height=height, distance=distance, prominence=prominence)
         self.peaks = peaks
 
-    def make_plot(self):
-        # Erstellte einen Line Plot, der ersten 2000 Werte mit der Zeit auf der x-Achse
-        fig = px.line(self.df.head(2000), x="Zeit in ms", y="Messwerte in mV")
+    def make_plot(self, lower=0, upper=2000):
+        # Create a line plot with the selected range of values and time on the x-axis
+        mask = (self.df['Zeit in ms'] > lower) & (self.df['Zeit in ms'] < upper)
+        df_selected = self.df.loc[mask]
+        fig = px.line(df_selected, x="Zeit in ms", y="Messwerte in mV")
+        
         # Highlight peaks if they exist
         if self.peaks is not None:
-            # Restrict peaks to the first 2000 values
+            # Restrict peaks to the selected range of values
             peak_df = self.df.iloc[self.peaks]
-            peak_df = peak_df[peak_df.index < 2000]
+            peak_df = peak_df[mask]
             fig.add_trace(
                 go.Scatter(
                     x=peak_df["Zeit in ms"],
@@ -37,7 +41,7 @@ class EKGData:
                     name='Peaks'
                 )
             )
-        return fig 
+        return fig
 
     def estimate_hr(self):
         '''Estimate heart rate based on peaks over 350 mV.'''

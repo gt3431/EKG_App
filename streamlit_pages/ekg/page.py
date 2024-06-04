@@ -38,11 +38,14 @@ def page():
         if st.session_state.ekgtest_name and st.session_state.ekgtest_name[1] != "Kein Test vorhanden":
             ekgtest_dict = EKGData.load_by_id(st.session_state.person.id, st.session_state.ekgtest_name[0])
             st.session_state.ekgtest = EKGData(ekgtest_dict)
+            lower = st.session_state.ekgtest.df["Zeit in ms"].min()
+            upper = int((st.session_state.ekgtest.df["Zeit in ms"].max() - lower))
+            range_ekg = st.slider("Anzeigende Werte aus Messwerte", 0, upper, (2500, 3500))
             st.session_state.ekgtest.find_peaks()
 
         ## Ekg Plot mit Messwerten anzeigen
         if st.session_state.ekgtest and st.session_state.ekgtest_name[1] != "Kein Test vorhanden":
-            st.plotly_chart(st.session_state.ekgtest.make_plot())
+            st.plotly_chart(st.session_state.ekgtest.make_plot(range_ekg[0] + lower, range_ekg[1] + lower))
             st.write(f"Maximale Herzfrequenz: {st.session_state.person.estimate_max_hr()} bpm")
             st.write(f"Durchschnittliche Herzfrequenz: {st.session_state.ekgtest.estimate_hr()} bpm")
 
