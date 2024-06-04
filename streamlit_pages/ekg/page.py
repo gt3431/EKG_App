@@ -42,7 +42,6 @@ def page():
         ## Plot mit Messwerten anzeigen
         if st.session_state.ekgtest:
             st.plotly_chart(st.session_state.ekgtest.make_plot())
-            st.write(f"Alter: {st.session_state.person.calc_age()}")
             st.write(f"Maximale Herzfrequenz: {st.session_state.person.estimate_max_hr()} bpm")
             st.write(f"Durchschnittliche Herzfrequenz: {st.session_state.ekgtest.estimate_hr()} bpm")
 
@@ -50,6 +49,8 @@ def page():
         if st.session_state.person:
             image = Image.open(st.session_state.person.picture_path)
             st.image(image)
+            st.write(f"Alter: {st.session_state.person.calc_age()}")
+            st.write(f"Geburtsdatum:{st.session_state.person.date_of_birth}")
 
     # Plot erstellen und anzeigen, wenn ein EKG-Test ausgewählt wurde
     '''if st.session_state.user_ekgtest != "None":

@@ -20,7 +20,7 @@ class Person:
         file = open("data/person_db.json")
         person_data = json.load(file)
         return person_data
-
+    
     @staticmethod
     def get_person_name_list() -> list[tuple]:
         '''Return a list of all persons as a tuple with the id and the name. '''
