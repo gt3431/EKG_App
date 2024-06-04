@@ -34,13 +34,14 @@ def page():
                 'Testauswahl',
                 options=st.session_state.person.get_ekgtest_names(), format_func=lambda option: option[1], key="sbTestauswahl")
         
-        if st.session_state.ekgtest_name and st.session_state.ekgtest_name != "Kein Test vorhanden":
+        ## EKG Objekt erstellen
+        if st.session_state.ekgtest_name and st.session_state.ekgtest_name[1] != "Kein Test vorhanden":
             ekgtest_dict = EKGData.load_by_id(st.session_state.person.id, st.session_state.ekgtest_name[0])
             st.session_state.ekgtest = EKGData(ekgtest_dict)
             st.session_state.ekgtest.find_peaks()
 
-        ## Plot mit Messwerten anzeigen
-        if st.session_state.ekgtest:
+        ## Ekg Plot mit Messwerten anzeigen
+        if st.session_state.ekgtest and st.session_state.ekgtest_name[1] != "Kein Test vorhanden":
             st.plotly_chart(st.session_state.ekgtest.make_plot())
             st.write(f"Maximale Herzfrequenz: {st.session_state.person.estimate_max_hr()} bpm")
             st.write(f"Durchschnittliche Herzfrequenz: {st.session_state.ekgtest.estimate_hr()} bpm")
@@ -52,8 +53,4 @@ def page():
             st.write(f"Alter: {st.session_state.person.calc_age()}")
             st.write(f"Geburtsdatum:{st.session_state.person.date_of_birth}")
 
-    # Plot erstellen und anzeigen, wenn ein EKG-Test ausgewählt wurde
-    '''if st.session_state.user_ekgtest != "None":
-        plot = make_plot(st.session_state.user_ekgtest)
-        if plot:
-            st.plotly_chart(plot)'''
+    
