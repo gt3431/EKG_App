@@ -22,21 +22,24 @@ class EKGData:
 
     def make_plot(self):
         # Erstellte einen Line Plot, der ersten 2000 Werte mit der Zeit auf der x-Achse
-        fig = px.line(self.df.head(2000), x="Zeit in ms", y="Messwerte in mV")
+        df_copy = self.df.copy()
+        df_copy['Zeit in s'] = df_copy['Zeit in ms'] / 1000
+        fig = px.line(df_copy.head(2000), x=("Zeit in s"), y="Messwerte in mV")
         # Highlight peaks if they exist
         if self.peaks is not None:
             # Restrict peaks to the first 2000 values
-            peak_df = self.df.iloc[self.peaks]
+            peak_df = df_copy.iloc[self.peaks]
             peak_df = peak_df[peak_df.index < 2000]
             fig.add_trace(
                 go.Scatter(
-                    x=peak_df["Zeit in ms"],
+                    x=peak_df["Zeit in s"],
                     y=peak_df["Messwerte in mV"],
                     mode='markers',
                     marker=dict(color='red', size=8),
                     name='Peaks'
                 )
             )
+        fig.update_layout(title=f"EKG Daten vom {self.date}")
         return fig 
 
     def estimate_hr(self):

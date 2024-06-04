@@ -50,6 +50,7 @@ def page():
         if st.session_state.person:
             image = Image.open(st.session_state.person.picture_path)
             st.image(image)
+            st.write(f"Name: {st.session_state.person.firstname} {st.session_state.person.lastname}")
             st.write(f"Alter: {st.session_state.person.calc_age()}")
             st.write(f"Geburtsdatum:{st.session_state.person.date_of_birth}")
 
