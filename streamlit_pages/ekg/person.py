@@ -47,7 +47,7 @@ class Person:
         age = current_year - birthyear
         return age
     
-    def estimate_max_hr(self):
+    def calc_max_heart_rate(self):
         if self.sex == "male":
             max_hr_bpm =  223 - 0.9 * self.calc_age()
         elif self.sex == "female":

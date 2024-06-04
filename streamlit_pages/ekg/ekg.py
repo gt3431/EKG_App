@@ -21,7 +21,7 @@ class EKGData:
         peaks, _ = find_peaks(x, height=height, distance=distance, prominence=prominence)
         self.peaks = peaks
 
-    def make_plot(self, lower=0, upper=2000):
+    def plot_time_series(self, lower=0, upper=2000):
         # Erstellte einen Line Plot, der ersten 2000 Werte mit der Zeit auf der x-Achse
         df = self.df.copy()
         df['Zeit in s'] = self.df['Zeit in ms'] / 1000
@@ -62,7 +62,7 @@ class EKGData:
         total_time_min = total_time_ms / 60000
         
         # Calculate average heart rate
-        hr = num_peaks / total_time_min
+        hr = int(num_peaks / total_time_min)
         
         return hr
     

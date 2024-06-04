@@ -63,8 +63,8 @@ def page():
 
         ## Ekg Plot mit Messwerten anzeigen
         if st.session_state.ekgtest and st.session_state.ekgtest_name[1] != "Kein Test vorhanden":
-            st.plotly_chart(st.session_state.ekgtest.make_plot(range_ekg[0] + lower, range_ekg[1] + lower))
-            st.write(f"Maximale Herzfrequenz: {st.session_state.person.estimate_max_hr()} bpm")
+            st.plotly_chart(st.session_state.ekgtest.plot_time_series(range_ekg[0] + lower, range_ekg[1] + lower))
+            st.write(f"Maximale Herzfrequenz: {st.session_state.person.calc_max_heart_rate()} bpm")
             st.write(f"Durchschnittliche Herzfrequenz: {st.session_state.ekgtest.estimate_hr()} bpm")
 
     with col2:
