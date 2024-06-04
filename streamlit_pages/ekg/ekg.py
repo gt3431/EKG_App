@@ -49,23 +49,23 @@ class EKGData:
     def estimate_hr(self):
         '''Estimate heart rate based on peaks over 350 mV.'''
         # Identify peaks over 350 mV
-        peaks_over_350 = self.df[(self.df['Messwerte in mV'] > 350)]
+        peaks_over_340 = self.df.iloc[self.peaks]
         
-        # Find the indices of these peaks
-        peak_indices = peaks_over_350.index
-
-        # Calculate the time differences between consecutive peaks
-        if len(peak_indices) > 1:
-            time_diffs = np.diff(self.df.loc[peak_indices, 'Zeit in ms'].values)
-            
-            # Calculate heart rate: 60,000 ms per minute divided by average time difference in ms
-            avg_time_diff = np.mean(time_diffs)
-            hr = int(6000 / avg_time_diff)
-        else:
-            hr = None
-
+        
+        # Count the number of peaks
+        num_peaks = len(peaks_over_340)
+        
+        # Calculate the total time in milliseconds
+        total_time_ms = self.df['Zeit in ms'].max() - self.df['Zeit in ms'].min()
+        
+        # Convert total time to minutes
+        total_time_min = total_time_ms / 60000
+        
+        # Calculate average heart rate
+        hr = num_peaks / total_time_min
+        
         return hr
-
+    
     @staticmethod
     def load_by_id(person_id, ekg_id):
         person = Person.load_by_id(person_id)
