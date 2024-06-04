@@ -16,7 +16,7 @@ class EKGData:
         self.df = pd.read_csv(self.data, sep='\t', header=None, names=['Messwerte in mV', 'Zeit in ms'])
         self.peaks = None
 
-    def find_peaks(self, height=None, distance=None, prominence=None):
+    def find_peaks(self, height=340, distance=None, prominence=None):
         '''Find peaks in the EKG data.'''
         x = self.df['Messwerte in mV'].values
         peaks, _ = find_peaks(x, height=height, distance=distance, prominence=prominence)
