@@ -32,12 +32,13 @@ def page():
     with col1:
         ## Person auswählen
         st.write("## Versuchsperson auswählen")
+        Person.get_person_name_list()
         st.session_state.person_name = st.selectbox(
             'Versuchsperson',
             options=Person.get_person_name_list(), format_func=lambda option: option[1], key="sbVersuchsperson")
 
         if st.session_state.person_name:
-            st.session_state.person = Person(Person.load_by_id(st.session_state.person_name[0]))
+            st.session_state.person = Person.load_by_id(st.session_state.person_name[0])
         
         ## EKG Test auswählen
         if st.session_state.person:       
@@ -47,8 +48,8 @@ def page():
         
         ## EKG Objekt erstellen
         if st.session_state.ekgtest_name and st.session_state.ekgtest_name[1] != "Kein Test vorhanden":
-            ekgtest_dict = EKGData.load_by_id(st.session_state.person.id, st.session_state.ekgtest_name[0])
-            st.session_state.ekgtest = EKGData(ekgtest_dict)
+            st.session_state.ekgtest = EKGData.load_by_id(st.session_state.ekgtest_name[0])
+            st.session_state.ekgtest.load_data()
             lower = st.session_state.ekgtest.df["Zeit in ms"].min() / 1000
             upper = int((st.session_state.ekgtest.df["Zeit in ms"].max() / 1000 - lower))
             range_ekg = (300, 310)

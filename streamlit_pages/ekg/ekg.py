@@ -4,14 +4,19 @@ import plotly.express as px
 from streamlit_pages.ekg.person import Person
 import plotly.graph_objects as go
 from scipy.signal import find_peaks
-import numpy as np
+from peewee import *
+from streamlit_pages.ekg.person import Person
 
+class EKGData(Model):
+    date = DateField()
+    data = CharField()
+    subject = ForeignKeyField(Person, backref='ekg_data')
 
-class EKGData:
-    def __init__(self, ekg_dict):
-        self.id = ekg_dict["id"]
-        self.date = ekg_dict["date"]
-        self.data = ekg_dict["result_link"]
+    #TODO: Make this global
+    class Meta:
+        database = SqliteDatabase('data/person.db')
+    
+    def load_data(self):
         self.df = pd.read_csv(self.data, sep='\t', header=None, names=['Messwerte in mV', 'Zeit in ms'])
         self.peaks = None
 
@@ -22,7 +27,6 @@ class EKGData:
         self.peaks = peaks
 
     def plot_time_series(self, lower=0, upper=2000):
-        # Erstellte einen Line Plot, der ersten 2000 Werte mit der Zeit auf der x-Achse
         df = self.df.copy()
         df['Zeit in s'] = self.df['Zeit in ms'] / 1000
     
@@ -31,7 +35,6 @@ class EKGData:
         fig = px.line(df_selected, x="Zeit in s", y="Messwerte in mV")
         # Highlight peaks if they exist
         if self.peaks is not None:
-            # Restrict peaks to the first 2000 values
             peak_df = df.iloc[self.peaks]
             peak_df = peak_df[mask]
             fig.add_trace(
@@ -51,7 +54,6 @@ class EKGData:
         # Identify peaks over 350 mV
         peaks_over_340 = self.df.iloc[self.peaks]
         
-        
         # Count the number of peaks
         num_peaks = len(peaks_over_340)
         
@@ -67,14 +69,5 @@ class EKGData:
         return hr
     
     @staticmethod
-    def load_by_id(person_id, ekg_id):
-        person = Person.load_by_id(person_id)
-        
-        if not person:
-            return None
-        
-        for ekg in person.get("ekg_tests", []):
-            if ekg["id"] == ekg_id:
-                return ekg
-        
-        return None
+    def load_by_id(id):
+        return EKGData.get(EKGData.id == id)
