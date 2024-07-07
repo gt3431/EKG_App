@@ -21,9 +21,9 @@ def page():
         st.markdown('#### Messwerte')
         col1, col2 = st.columns([1, 1])
         with col1:
-            st.metric(label="Mittelwert Leistung", value=f"{int(df["PowerOriginal"].mean())} W")
+            st.metric(label="Mittelwert Leistung", value=f"{int(df['PowerOriginal'].mean())} W")
         with col2:
-            st.metric(label="Maximalwert Leistung", value=f"{int(df["PowerOriginal"].max())} W")
+            st.metric(label="Maximalwert Leistung", value=f"{int(df['PowerOriginal'].max())} W")
         
         st.markdown('#### Zonen Analyse')
         combined_df = analyze_data(df)

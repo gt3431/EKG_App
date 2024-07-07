@@ -68,6 +68,7 @@ def page():
             st.write(f"Maximale Herzfrequenz: {st.session_state.person.calc_max_heart_rate()} bpm")
             st.write(f"Durchschnittliche Herzfrequenz: {st.session_state.ekgtest.estimate_hr()} bpm")
 
+
     with col2:
         if st.session_state.person:
             image = Image.open(st.session_state.person.picture_path)

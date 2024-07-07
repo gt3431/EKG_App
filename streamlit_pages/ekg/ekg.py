@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import streamlit as st
 import plotly.express as px
 from streamlit_pages.ekg.person import Person
@@ -26,6 +27,26 @@ class EKGData(Model):
         peaks, _ = find_peaks(x, height=height, distance=distance, prominence=prominence)
         self.peaks = peaks
 
+    def heartrate(self):
+        '''Calculate heart rate over time based on peaks.'''
+        if self.peaks is None:
+            return None
+        
+        # Get the time values at the peaks
+        peak_times = self.df['Zeit in ms'].iloc[self.peaks].values
+        
+        # Calculate the time differences between consecutive peaks
+        time_diff = np.diff(peak_times)
+        
+        # Calculate heart rate in beats per minute (BPM)
+        heart_rate = 60000 / time_diff
+        
+        # Create a DataFrame for the heart rate
+        hr_df = pd.DataFrame({'Zeit in ms': peak_times[1:], 'Heart Rate in BPM': heart_rate})
+        hr_df['Zeit in s'] = hr_df['Zeit in ms'] / 1000
+        
+        return hr_df
+    
     def plot_time_series(self, lower=0, upper=2000):
         df = self.df.copy()
         df['Zeit in s'] = self.df['Zeit in ms'] / 1000
@@ -46,8 +67,36 @@ class EKGData(Model):
                     name='Peaks'
                 )
             )
-        fig.update_layout(title=f"EKG Daten vom {self.date}")
-        return fig 
+        # Add heart rate plot
+        hr_df = self.heartrate()
+        if hr_df is not None:
+            hr_df_masked = hr_df[(hr_df['Zeit in s'] > lower) & (hr_df['Zeit in s'] < upper)]
+            fig.add_trace(
+                go.Scatter(
+                    x=hr_df_masked["Zeit in s"],
+                    y=hr_df_masked["Heart Rate in BPM"],
+                    name='Heart Rate',
+                    yaxis='y2'
+                )
+            )
+
+        # Update layout for two y-axes
+        fig.update_layout(
+            title=f"EKG Daten und Herzfrequenz vom {self.date}",
+            yaxis=dict(
+                title="EKG Messwerte in mV"
+            ),
+            yaxis2=dict(
+                title="Heart Rate in BPM",
+                overlaying='y',
+                side='right'
+            ),
+            xaxis=dict(
+                title="Zeit in s"
+            )
+        )
+        fig.update_layout(title=f"EKG Daten und Herzfrequenz vom {self.date}")
+        return fig
 
     def estimate_hr(self):
         '''Estimate heart rate based on peaks over 350 mV.'''
