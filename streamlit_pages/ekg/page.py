@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_pages.ekg.person import Person
 from streamlit_pages.ekg.ekg import EKGData
 from PIL import Image
+from streamlit_pages.ekg.new_mask import new_person
 
 def page():
     if 'person_name' not in st.session_state:
@@ -33,19 +34,26 @@ def page():
         ## Person auswählen
         st.write("## Versuchsperson auswählen")
         Person.get_person_name_list()
+        # Lade die Liste der Personen und füge "test" hinzu
+        persons = Person.get_person_name_list()
+        persons.append((-1, 'Neue Versuchsperson hinzufügen'))
         st.session_state.person_name = st.selectbox(
             'Versuchsperson',
-            options=Person.get_person_name_list(), format_func=lambda option: option[1], key="sbVersuchsperson")
-
-        if st.session_state.person_name:
-            st.session_state.person = Person.load_by_id(st.session_state.person_name[0])
+            options=persons, format_func=lambda option: option[1], key="sbVersuchsperson")
+        if st.session_state.person_name[0] == -1:
+            st.session_state.page = 'Neue Versuchsperson hinzufügen'
+            return new_person()
+        else:
+            if st.session_state.person_name:
+                st.session_state.person = Person.load_by_id(st.session_state.person_name[0])
         
         ## EKG Test auswählen
         if st.session_state.person:       
             st.session_state.ekgtest_name = st.selectbox(
                 'Testauswahl',
                 options=st.session_state.person.get_ekgtest_names(), format_func=lambda option: option[1], key="sbTestauswahl")
-        
+        #TODO: button hinzufügen um neue Tests hinzuzufügen für die richtige person
+
         ## EKG Objekt erstellen
         if st.session_state.ekgtest_name and st.session_state.ekgtest_name[1] != "Kein Test vorhanden":
             st.session_state.ekgtest = EKGData.load_by_id(st.session_state.ekgtest_name[0])
@@ -77,4 +85,3 @@ def page():
             st.write(f"Alter: {st.session_state.person.calc_age()}")
             st.write(f"Geburtsdatum: {st.session_state.person.date_of_birth}")
 
-    

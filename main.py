@@ -5,6 +5,7 @@ from peewee import *
 from streamlit_pages.ekg.person import Person
 from streamlit_pages.ekg.ekg import EKGData
 from datetime import date
+from streamlit_pages.ekg.new_mask import new_person
 
 
 if __name__ == "__main__":
@@ -34,6 +35,11 @@ if __name__ == "__main__":
     page = st.sidebar.radio("Go to", ["EKG App", "Interaktiver Plot"])
 
     if page == "EKG App":
+        from streamlit_pages.ekg.page import page as ekg_page
         ekg_page()
-    else:
+    elif page == "Interaktiver Plot":
+        from streamlit_pages.interactive_plot.page import page as interactive_plot_page
         interactive_plot_page()
+    else:
+        from streamlit_pages.ekg.new_mask import new_person  # Importiere die new_person Funktion nur, wenn sie benötigt wird
+        new_person()
