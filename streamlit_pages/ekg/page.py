@@ -5,11 +5,9 @@ from streamlit_pages.ekg.edit_masks import new_ekg_test
 def page():
 
     def update_slider():
-        print(st.session_state.slider)
         st.session_state.slider = (st.session_state.lower_range, st.session_state.upper_range)
 
     def update_numin():
-        print(st.session_state.slider[0], st.session_state.lower_range)
         st.session_state.lower_range = st.session_state.slider[0]
         st.session_state.upper_range = st.session_state.slider[1]
 

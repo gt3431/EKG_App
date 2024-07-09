@@ -25,7 +25,6 @@ def create_power_curve(power_series, time_beween_samples=1, resolution_watts=1, 
     data = []
     for p in range(0, power_series.max(), resolution_watts):
         data.append([power_series.max()-p, maxtime_spend_in_power(power_series, p) * time_beween_samples])
-        #print(f"Max time spend in {power_data.max()-p}W: {maxtime_spend_in_power(power_data, p)}")
 
     df = pd.DataFrame(data, columns=['Leistung', 'Maximale Zeit'])
     return df

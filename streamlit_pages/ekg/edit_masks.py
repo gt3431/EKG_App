@@ -63,16 +63,14 @@ def new_person():
 
 def edit_person():
     st.write("## Person bearbeiten")
-    print("edit")
+
     # Erstelle Eingabefelder für jede erforderliche Angabe
     person = st.session_state.editing_person
-    print("edit1")
     firstname = st.text_input("Vorname", value=person.firstname)
     lastname = st.text_input("Nachname", value=person.lastname)
     dateofbirth = st.number_input("Geburtsdatum", min_value=1900, max_value=2024, value=person.date_of_birth)
     sex = st.selectbox("Geschlecht", ['male', 'female'], index=["male", "female"].index(person.sex))
     picture = st.file_uploader("Picture", type=["jpg", "jpeg", "png"])
-    print("edit2")
     if picture:
         # Speichere das Bild mit den ersten beiden Buchstaben des Vornamens und dem Nachnamen als Dateinamen
         filename = f"data/pictures/{firstname[0].lower()}{firstname[1].lower()}_{lastname.lower()}.{picture.name.split('.')[-1]}"
@@ -81,7 +79,6 @@ def edit_person():
         person.picture_path = filename
     if st.button("Löschen"):
         #picture delete 
-        print("deletee")
         if person.picture_path != 'data/pictures/none.jpg':
             os.remove(person.picture_path)
             person.picture_path = 'data/pictures/none.jpg'
@@ -89,13 +86,11 @@ def edit_person():
         del st.session_state.editing_person
         st.success("Person erfolgreich gelöscht!")
         st.session_state.page = "main"
-        print("deletee")
         st.rerun()
         
 
     # Hinzufügen einer Schaltfläche zum Anwenden der Änderungen
     if st.button("Aktualisieren"):
-        print("edit3")
         # Überprüfen, ob alle Felder ausgefüllt sind
         if firstname and lastname and sex and dateofbirth:
             # Aktualisiere die Personendetails
