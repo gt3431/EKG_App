@@ -1,45 +1,26 @@
+from peewee import *
+from init import init
 import streamlit as st
 from streamlit_pages.ekg.page import page as ekg_page
 from streamlit_pages.interactive_plot.page import page as interactive_plot_page
-from peewee import *
-from streamlit_pages.ekg.person import Person
-from streamlit_pages.ekg.ekg import EKGData
-from datetime import date
-from streamlit_pages.ekg.new_mask import new_person
+from streamlit_pages.sidebar import page as sidebar_page
+from streamlit_pages.ekg.edit_masks import new_person , edit_person
 
 
 if __name__ == "__main__":
-    
-    #TODO: Make this ist own file and import it
-    # Initial setup of the database
-    db = SqliteDatabase('data/person.db')
-    db.connect()
-    if not db.get_tables():
-        db.create_tables([Person, EKGData])
-    if not Person.select():
-        #Fill with example data
-        julian = Person(firstname='Julian', lastname='Huber', sex='male', picture_path='data/pictures/tb.jpg', date_of_birth=1989)
-        julian.save()
-        EKGData(date=date(2023, 2, 10), data='data/ekg_data/01_Ruhe.txt', subject=julian).save()
-        EKGData(date=date(2023, 3, 11), data='data/ekg_data/04_Belastung.txt', subject=julian).save()
-        yannic = Person(firstname='Yannic', lastname='Heyer', sex='male', picture_path='data/pictures/js.jpg', date_of_birth=1967)
-        yannic.save()
-        EKGData(date=date(2023, 2, 10), data='data/ekg_data/02_Ruhe.txt', subject=yannic).save()
-        yunus = Person(firstname='Yunus', lastname='Schmirander', sex='male', picture_path='data/pictures/bl.jpg', date_of_birth=1973)
-        yunus.save()
-        EKGData(date=date(2023, 2, 11), data='data/ekg_data/03_Ruhe.txt', subject=yunus).save()
-        tobias = Person(firstname='Tobias', lastname='Gasteiger', sex='male', picture_path='data/pictures/none.jpg', date_of_birth=1998)
-        tobias.save()
+    init()
 
-    st.sidebar.title("Navigation")
-    page = st.sidebar.radio("Go to", ["EKG App", "Interaktiver Plot"])
+    with st.sidebar:
+        st.sidebar.title("StreamBoard")
+        sidebar_page()
 
-    if page == "EKG App":
-        from streamlit_pages.ekg.page import page as ekg_page
-        ekg_page()
-    elif page == "Interaktiver Plot":
-        from streamlit_pages.interactive_plot.page import page as interactive_plot_page
-        interactive_plot_page()
-    else:
-        from streamlit_pages.ekg.new_mask import new_person  # Importiere die new_person Funktion nur, wenn sie benötigt wird
+    if st.session_state.page == "main":
+        tab_ekg, tab_activity = st.tabs(["EKG", "Aktivitätsdaten"])
+        with tab_ekg:
+            ekg_page()
+        with tab_activity:
+            interactive_plot_page()
+    elif st.session_state.page == "add":
         new_person()
+    elif st.session_state.page == "edit":
+        edit_person()

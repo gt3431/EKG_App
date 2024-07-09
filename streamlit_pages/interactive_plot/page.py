@@ -3,35 +3,51 @@ import pandas as pd
 import streamlit_pages.interactive_plot.powerzones.create_plot as cp
 from streamlit_pages.interactive_plot.powerzones.data_analize import analyze_data
 from streamlit_pages.interactive_plot.power_curve.create_plot_power import create_power_curve, create_plot_power_curve
+from streamlit_pages.interactive_plot.activity import Activity
+from streamlit_pages.ekg.edit_masks import new_activity_test
 
 def page():
-
-    st.markdown('## Interaktiver Plot')
-    # Create a selection box for navigation
-    tab_heartrate,tab_powercurve = st.tabs(["Powerzones", "Power Curve"])
+    activities = st.session_state.person.get_activity_names()
+    activities.append((-1, 'Neuen Test hinzufügen'))
+    st.write("## Aktivitätsdaten")
+    st.session_state.aktivity_name = st.selectbox(
+        'Testauswahl',
+        options=activities,
+        format_func=lambda option: option[1],
+        key="sbActivityTestauswahl"
+    )
     
-    #einteilung in die beiden analysen
-    with tab_heartrate:
-        input_max_heartrate = st.slider("Geben Sie ihre maximale Herzfrequents ein:", 50, 300, 180)
-        df, fig = cp.create_plot("data/activities/activity.csv", input_max_heartrate)
+    # Überprüfen, ob ein neuer Test hinzugefügt werden soll
+    if st.session_state.aktivity_name and st.session_state.aktivity_name[0] == -1:
+        new_activity_test()
+            
+    
+    
+    if st.session_state.aktivity_name and st.session_state.aktivity_name[0] != -1:
         
-        st.markdown('#### Graph')
-        st.plotly_chart(fig)
+        tab_heartrate,tab_powercurve = st.tabs(["Powerzones", "Power Curve"])
+        with tab_heartrate:
+            
+            input_max_heartrate = st.slider("Geben Sie ihre maximale Herzfrequents ein:", 110, 210, 180)
+            df, fig = cp.create_plot(Activity.get_by_id(st.session_state.aktivity_name[0]).data, input_max_heartrate)
 
-        st.markdown('#### Messwerte')
-        col1, col2 = st.columns([1, 1])
-        with col1:
-            st.metric(label="Mittelwert Leistung", value=f"{int(df['PowerOriginal'].mean())} W")
-        with col2:
-            st.metric(label="Maximalwert Leistung", value=f"{int(df['PowerOriginal'].max())} W")
-        
-        st.markdown('#### Zonen Analyse')
-        combined_df = analyze_data(df)
-        st.dataframe(combined_df) 
+            st.markdown('#### Graph')
+            st.plotly_chart(fig)
 
-    with tab_powercurve:
-        df = pd.read_csv('data/activities/activity.csv', encoding='utf-8',sep = ",", header=0, skiprows=[1])
-        power_data = df['PowerOriginal'][10:300]
-        power_curve_df = create_power_curve(power_data, time_beween_samples=1, resolution_watts=1)
-        fig = create_plot_power_curve(power_curve_df)
-        st.plotly_chart(fig)
+            st.markdown('#### Messwerte')
+            col1, col2 = st.columns([1, 1])
+            with col1:
+                st.metric(label="Mittelwert Leistung", value=f"{int(df['PowerOriginal'].mean())} W")
+            with col2:
+                st.metric(label="Maximalwert Leistung", value=f"{int(df['PowerOriginal'].max())} W")
+            
+            st.markdown('#### Zonen Analyse')
+            combined_df = analyze_data(df)
+            st.dataframe(combined_df) 
+
+        with tab_powercurve:
+            df = pd.read_csv(Activity.get_by_id(st.session_state.aktivity_name[0]).data, encoding='utf-8',sep = ",", header=0, skiprows=[1])
+            power_data = df['PowerOriginal']
+            power_curve_df = create_power_curve(power_data, time_beween_samples=1, resolution_watts=1)
+            fig = create_plot_power_curve(power_curve_df)
+            st.plotly_chart(fig)

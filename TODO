@@ -2,19 +2,13 @@ TODO List:
 
 1. [ ] Kommentare und Docstrings 
 2. [X] Delete button 
-3. [T] frontend anpassen 
+3. [X] frontend anpassen 
 4. [ ] auf server hochladen 
-5. [L] Heartrate variabilität 
-6. [T] interaktive plots für jede person 
-7. [L] neue dateien hinzufügen (in arbeit)
-8. [ ] Requierments.txt
+5. [] Heartrate variabilität  -> 
+6. [X] interaktive plots für jede person 
+7. [X] neue dateien hinzufügen
+8. [X] Requierments.txt
 
 
-Lucas hat gemacht:
-- den Löschen button in der Edit page hinzugefügt (löscht auch das dazugehörige bild)
-- den neuen Dateien button in das drop down menü eingefügt und das drag and drop feld dafür 
-    - funktioniert aber noch nicht 100% 
-
-wäre noch gut wenn wir die edit page bissl besser anzeigen lassen könnten 
 
 

@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import streamlit as st
 import plotly.express as px
 from streamlit_pages.ekg.person import Person
 import plotly.graph_objects as go
@@ -13,9 +12,8 @@ class EKGData(Model):
     data = CharField()
     subject = ForeignKeyField(Person, backref='ekg_data')
 
-    #TODO: Make this global
     class Meta:
-        database = SqliteDatabase('data/person.db')
+        database = db = SqliteDatabase('data/person.db')
     
     def load_data(self):
         self.df = pd.read_csv(self.data, sep='\t', header=None, names=['Messwerte in mV', 'Zeit in ms'])

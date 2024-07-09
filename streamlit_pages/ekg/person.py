@@ -1,6 +1,5 @@
 from peewee import *
-import json
-from datetime import datetime 
+from datetime import datetime
 
 class Person(Model):
     lastname = CharField()
@@ -9,9 +8,8 @@ class Person(Model):
     sex = CharField()
     picture_path = CharField()
 
-    #TODO: Make this global
     class Meta:
-        database = SqliteDatabase('data/person.db')
+        database = db = SqliteDatabase('data/person.db')
     
     @staticmethod
     def get_person_name_list() -> list[tuple]:
@@ -45,7 +43,7 @@ class Person(Model):
 
     def get_ekgtest_names(self) -> list[tuple]:
         '''Return a list of all EKG test names of the person. '''
-        from streamlit_pages.ekg.ekg import EKGData #Fixes circular import (I know this is ugly but i dont get paid to do this so... this should be fine :D)
+        from streamlit_pages.ekg.ekg import EKGData #Fixes circular import
         
         ekg_names = []
         ekgs = EKGData.select().where(EKGData.subject == self)
@@ -59,3 +57,20 @@ class Person(Model):
             ekg_names.append((ekg.id, name))
             
         return ekg_names
+    
+    def get_activity_names(self) -> list[tuple]:
+        '''Return a list of all activity test names of the person. '''
+        from streamlit_pages.interactive_plot.activity import Activity #Fixes circular import
+        
+        activity_names = []
+        ativities = Activity.select().where(Activity.subject == self)
+
+        if len(ativities) == 0:
+            return [(-1, "Kein Test vorhanden")]
+        
+        for act in ativities:
+            name = act.data.split("/")[-1]
+            name = name.split(".")[0]
+            activity_names.append((act.id, name))
+            
+        return activity_names
