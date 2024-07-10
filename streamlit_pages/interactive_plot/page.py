@@ -21,6 +21,19 @@ def page():
     # Überprüfen, ob ein neuer Test hinzugefügt werden soll
     if st.session_state.aktivity_name and st.session_state.aktivity_name[0] == -1:
         new_activity_test()
+    
+    if st.session_state.aktivity_name and st.session_state.aktivity_name[0] != -1:
+        if st.button("Lösche Aktivität"):
+            # Lade die Aktivität
+            activity = Activity.get_by_id(st.session_state.aktivity_name[0])
+            # Lösche die Aktivität
+            activity.delete_instance()
+            os.remove(activity.data)
+            # Aktualisiere die Sitzung
+            st.session_state.aktivity_name = None
+            st.success("Aktivität erfolgreich gelöscht!")
+            st.rerun()
+
             
     if st.session_state.aktivity_name and st.session_state.aktivity_name[0] != -1:
         
@@ -51,17 +64,3 @@ def page():
             fig = create_plot_power_curve(power_curve_df)
             st.plotly_chart(fig)
 
-    ## Aktivität Löschen
-    if st.session_state.aktivity_name and st.session_state.aktivity_name[0] != -1:
-        if st.button("Delete Aktivity"):
-            # Lade die Aktivität
-            activity = Activity.get_by_id(st.session_state.aktivity_name[0])
-            # Lösche die Aktivität
-            activity.delete_instance()
-            os.remove(activity.data)
-            # Aktualisiere die Sitzung
-            st.session_state.aktivity_name = None
-            st.success("Aktivität erfolgreich gelöscht!")
-            st.experimental_rerun()
-    else:
-        st.warning("Bitte wählen Sie eine Aktivität aus.")

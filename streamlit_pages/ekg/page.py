@@ -38,6 +38,20 @@ def page():
                 upper = int((st.session_state.ekgtest.df["Zeit in ms"].max() / 1000 - lower))
                 range_ekg = (300, 310)
                 st.session_state.ekgtest.find_peaks()
+        
+        if st.session_state.ekgtest and st.session_state.ekgtest_name[0] != -1:
+            if st.button("Lösche EKG"):
+                # Lade den EKG Test
+                ekg_test = EKGData.get_by_id(st.session_state.ekgtest_name[0])
+                # Lösche den EKG Test
+                ekg_test.delete_instance()
+                #lösche den EKG Test aus data/ekg_data
+                os.remove(ekg_test.data)
+                # Aktualisiere die Sitzung
+                st.session_state.ekgtest_name = None
+                st.session_state.ekgtest = None
+                st.success("EKG Test erfolgreich gelöscht!")
+                st.rerun()
 
     with col2:
         if st.session_state.ekgtest and st.session_state.ekgtest_name[0] != -1:
@@ -58,24 +72,7 @@ def page():
             upper_range = st.number_input("Upper", value=305, key="upper_range", on_change = update_slider)
         range_ekg = st.slider("_", 0, upper, (lower_range, upper_range), key="slider", on_change= update_numin, label_visibility="hidden")
 
-    ## Ekg Plot mit Messwerten anzeigen
+    ## Ekg Plot anzeigen
     if st.session_state.ekgtest and st.session_state.ekgtest_name[0] != -1:
         st.plotly_chart(st.session_state.ekgtest.plot_time_series(range_ekg[0] + lower, range_ekg[1] + lower))
-
-    ## EKG Löschen
-    if st.session_state.ekgtest_name and st.session_state.ekgtest_name[0] != -1:
-        if st.button("Delete EKG Test"):
-            # Lade den EKG Test
-            ekg_test = EKGData.get_by_id(st.session_state.ekgtest_name[0])
-            # Lösche den EKG Test
-            ekg_test.delete_instance()
-            #lösche den EKG Test aus data/ekg_data
-            os.remove(ekg_test.data)
-            # Aktualisiere die Sitzung
-            st.session_state.ekgtest_name = None
-            st.session_state.ekgtest = None
-            st.success("EKG Test erfolgreich gelöscht!")
-            st.experimental_rerun()
-    else:
-        st.warning("Bitte wählen Sie einen EKG Test aus.")
 
