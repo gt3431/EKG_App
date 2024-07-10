@@ -145,13 +145,17 @@ def new_ekg_test():
 
 def new_activity_test():
     # Create an input field for the activity data
+    # Get the current number of saved files
+    file_count = len(os.listdir("data/activities"))
+    # Format the file count with leading zeros
+    file_count_str = str(file_count).zfill(2)
     activity_data = st.file_uploader("Aktivitätsdaten", type=["csv"])
     person = st.session_state.person
     # Check if the upload button is clicked
     if st.button("Upload Aktivitätsdaten"):
         if activity_data:
             # Save the EKG data with a unique filename
-            activity_filename = f"data/activities/{activity_data.name}"
+            activity_filename = f"data/activities/{file_count_str}_{activity_data.name}"
             with open(activity_filename, "wb") as f:
                 f.write(activity_data.read())
             
