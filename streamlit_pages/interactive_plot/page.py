@@ -8,6 +8,7 @@ from streamlit_pages.ekg.edit_masks import new_activity_test
 import os
 
 def page():
+    # Get the person object from the session state
     activities = st.session_state.person.get_activity_names()
     activities.append((-1, 'Neuen Test hinzufügen'))
     st.write("## Aktivitätsdaten")
@@ -36,7 +37,7 @@ def page():
 
             
     if st.session_state.aktivity_name and st.session_state.aktivity_name[0] != -1:
-        
+        # Create tabs for the powerzones and powercurve
         tab_heartrate,tab_powercurve = st.tabs(["Powerzones", "Power Curve"])
         with tab_heartrate:
             
@@ -58,6 +59,7 @@ def page():
             st.dataframe(combined_df) 
 
         with tab_powercurve:
+            # Create the power curve
             df = pd.read_csv(Activity.get_by_id(st.session_state.aktivity_name[0]).data, encoding='utf-8',sep = ",", header=0, skiprows=[1])
             power_data = df['PowerOriginal']
             power_curve_df = create_power_curve(power_data, time_beween_samples=1, resolution_watts=1)

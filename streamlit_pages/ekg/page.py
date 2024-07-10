@@ -65,6 +65,7 @@ def page():
     ## EKG Objekt erstellen
     if st.session_state.ekgtest_name and st.session_state.ekgtest_name[0] != -1:
         st.write("#### Analysezeit auswählen [s]")
+        ## Slider und NumInput für die Analysezeit
         low, upp = st.columns(2)
         with low:
             lower_range = st.number_input("Lower", value=295, key="lower_range", on_change = update_slider)

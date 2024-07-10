@@ -6,12 +6,13 @@ import numpy as np
 
 
 def maxtime_spend_in_power(power_series, power):
+    '''Calculate the maximum time spend in a power zone.'''
     last_index = 0
     series_list = [0]
 
     max_power = power_series.max()
     power_data_cut = power_series[power_series>max_power-power]
-
+    
     for index, value in power_data_cut.items():
         if last_index and last_index == index - 1:
             series_list[-1] += 1
@@ -22,6 +23,7 @@ def maxtime_spend_in_power(power_series, power):
     return max(series_list)
 
 def create_power_curve(power_series, time_beween_samples=1, resolution_watts=1, ):
+    '''Create a power curve based on the power data.'''
     data = []
     for p in range(0, power_series.max(), resolution_watts):
         data.append([power_series.max()-p, maxtime_spend_in_power(power_series, p) * time_beween_samples])

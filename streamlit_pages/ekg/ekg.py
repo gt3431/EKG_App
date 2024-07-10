@@ -11,7 +11,7 @@ class EKGData(Model):
     date = DateField()
     data = CharField()
     subject = ForeignKeyField(Person, backref='ekg_data')
-
+    #
     class Meta:
         database = db = SqliteDatabase('data/person.db')
     

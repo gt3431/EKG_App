@@ -122,7 +122,6 @@ def new_ekg_test():
     # Check if the upload button is clicked
     if st.button("Upload EKG Daten"):
         if ekg_data:
-            # Save the EKG data with a unique filename
             # Get the current number of saved files
             file_count = len(os.listdir("data/ekg_data"))
             # Format the file count with leading zeros
@@ -144,7 +143,8 @@ def new_ekg_test():
             st.rerun()
 
 def new_activity_test():
-    # Create an input field for the activity data
+    '''Create an input field for the activity data'''
+
     # Get the current number of saved files
     file_count = len(os.listdir("data/activities"))
     # Format the file count with leading zeros

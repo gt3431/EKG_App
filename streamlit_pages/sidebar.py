@@ -8,14 +8,14 @@ def page():
     #
     
     persons = Person.get_person_name_list()
-
+    '''Auswahl der Versuchspersonen.'''
     st.session_state.person_name = st.selectbox(
         'Versuchsperson',
         options=persons, format_func=lambda option: option[1], key="sbVersuchsperson")
 
     if st.session_state.person_name:
         st.session_state.person = Person.load_by_id(st.session_state.person_name[0])
-     
+    '''Display the selected person.'''
     if st.session_state.person:
         image = Image.open(st.session_state.person.picture_path)
         st.image(image)
@@ -23,6 +23,7 @@ def page():
         st.write(f"Geburtsdatum: {st.session_state.person.date_of_birth}")
     
     col1, col2 = st.columns(2)
+    # Buttons for editing and adding a person
     with col1:
         if st.button("Edit"):
             st.session_state.page = "edit"

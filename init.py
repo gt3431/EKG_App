@@ -6,7 +6,7 @@ from streamlit_pages.ekg.ekg import EKGData
 from streamlit_pages.interactive_plot.activity import Activity
 
 
-
+'''Fixed database import and initial setup of the database.'''
 def init():
     # Initial setup of streamlit session states
     if 'person_name' not in st.session_state:

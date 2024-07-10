@@ -33,6 +33,7 @@ class Person(Model):
         return age
     
     def calc_max_heart_rate(self):
+        '''Calculate the maximum heart rate of the person based'''
         if self.sex == "male":
             max_hr_bpm =  223 - 0.9 * self.calc_age()
         elif self.sex == "female":
@@ -67,7 +68,7 @@ class Person(Model):
 
         if len(ativities) == 0:
             return [(-1, "Kein Test vorhanden")]
-        
+        # Get the name of the activity test
         for act in ativities:
             name = act.data.split("/")[-1]
             name = name.split(".")[0]
