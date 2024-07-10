@@ -70,31 +70,32 @@ class EKGData(Model):
         if hr_df is not None:
             hr_df_masked = hr_df[(hr_df['Zeit in s'] > lower) & (hr_df['Zeit in s'] < upper)]
             fig.add_trace(
-                go.Scatter(
-                    x=hr_df_masked["Zeit in s"],
-                    y=hr_df_masked["Heart Rate in BPM"],
-                    name='Heart Rate',
-                    yaxis='y2'
-                )
+            go.Scatter(
+                x=hr_df_masked["Zeit in s"],
+                y=hr_df_masked["Heart Rate in BPM"],
+                name='Heart Rate',
+                yaxis='y2'
             )
-
+            )
+            
         # Update layout for two y-axes
         fig.update_layout(
             title=f"EKG Daten und Herzfrequenz vom {self.date}",
             yaxis=dict(
-                title="EKG Messwerte in mV"
+            title="EKG Messwerte in mV"
             ),
             yaxis2=dict(
-                title="Heart Rate in BPM",
-                overlaying='y',
-                side='right'
+            title="Heart Rate in BPM",
+            overlaying='y',
+            side='right'
             ),
             xaxis=dict(
-                title="Zeit in s"
+            title="Zeit in s"
             )
         )
         fig.update_layout(title=f"EKG Daten und Herzfrequenz vom {self.date}")
         return fig
+
 
     def estimate_hr(self):
         '''Estimate heart rate based on peaks over 350 mV.'''
@@ -114,6 +115,23 @@ class EKGData(Model):
         hr = int(num_peaks / total_time_min)
         
         return hr
+    def hrv(self):
+        '''Calculate heart rate variability (HRV) based on peaks.'''
+        if self.peaks is None:
+            return None
+        
+        # Get the time values at the peaks
+        peak_times = self.df['Zeit in ms'].iloc[self.peaks].values
+        
+        # Calculate the time differences between consecutive peaks
+        time_diff = np.diff(peak_times)
+        sdnn = np.std(time_diff)
+        rmsd = np.sqrt(np.mean(time_diff**2))
+        # Berechnung der PNN50
+        nn50 = np.sum(np.abs(np.diff(time_diff)) > 50)
+        pnn50 = nn50 / len(time_diff) * 100
+    
+        return int(sdnn)
     
     @staticmethod
     def load_by_id(id):

@@ -14,7 +14,7 @@ def new_person():
     sex = st.selectbox("Geschlecht", ["male", "female"], index=None)
     picture = st.file_uploader("Bild", type=["jpg", "jpeg", "png"])
     ekg_data = st.file_uploader("EKG Daten", type=["csv", "txt"])
-    activity_data = st.file_uploader("Aktivität Dataen", type=["csv"])
+    activity_data = st.file_uploader("Aktivitäts Daten", type=["csv"])
 
     col1, col2 = st.columns(2)
 
@@ -72,11 +72,19 @@ def edit_person():
     sex = st.selectbox("Geschlecht", ['male', 'female'], index=["male", "female"].index(person.sex))
     picture = st.file_uploader("Picture", type=["jpg", "jpeg", "png"])
     if picture:
-        # Speichere das Bild mit den ersten beiden Buchstaben des Vornamens und dem Nachnamen als Dateinamen
+        # Erstelle den neuen Dateinamen
         filename = f"data/pictures/{firstname[0].lower()}{firstname[1].lower()}_{lastname.lower()}.{picture.name.split('.')[-1]}"
         with open(filename, "wb") as f:
             f.write(picture.read())
+
+        # Überprüfe, ob das alte Bild existiert und lösche es
+        if os.path.exists(person.picture_path):
+            os.remove(person.picture_path)
+
+        # Aktualisiere den Bildpfad der Person
         person.picture_path = filename
+        
+
     if st.button("Löschen"):
         #picture delete 
         if person.picture_path != 'data/pictures/none.jpg':
@@ -115,7 +123,12 @@ def new_ekg_test():
     if st.button("Upload EKG Daten"):
         if ekg_data:
             # Save the EKG data with a unique filename
-            ekg_filename = f"data/ekg_data/{person.firstname.lower()}_{person.lastname.lower()}_{ekg_data.name}"
+            # Get the current number of saved files
+            file_count = len(os.listdir("data/ekg_data"))
+            # Format the file count with leading zeros
+            file_count_str = str(file_count).zfill(2)
+            # Create the filename with the incremented file count
+            ekg_filename = f"data/ekg_data/{file_count_str}_{ekg_data.name}"
             with open(ekg_filename, "wb") as f:
                 f.write(ekg_data.read())
             
@@ -137,7 +150,7 @@ def new_activity_test():
     if st.button("Upload Aktivitätsdaten"):
         if activity_data:
             # Save the EKG data with a unique filename
-            activity_filename = f"data/activities/{person.firstname.lower()}_{person.lastname.lower()}_{activity_data.name}"
+            activity_filename = f"data/activities/{activity_data.name}"
             with open(activity_filename, "wb") as f:
                 f.write(activity_data.read())
             

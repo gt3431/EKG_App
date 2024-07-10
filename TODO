@@ -1,10 +1,10 @@
 TODO List:
 
 1. [ ] Kommentare und Docstrings 
-2. [X] Delete button 
-3. [X] frontend anpassen 
-4. [ ] auf server hochladen 
-5. [ ] Heartrate variabilität  
+2. [ ] auf server hochladen
+3. [L] Heartrate variabilität (HRV) 
+4. [X] frontend anpassen 
+5. [X] Delete button
 6. [X] interaktive plots für jede person 
 7. [X] neue dateien hinzufügen
 8. [X] Requierments.txt
@@ -12,4 +12,4 @@ TODO List:
 
 
 
-Heartrate variabilität  geht das schon?
+im edit modus wenn man auf neue person geht reloaden 

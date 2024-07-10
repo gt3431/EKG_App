@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit_pages.ekg.ekg import EKGData
 from streamlit_pages.ekg.edit_masks import new_ekg_test
+import os
 
 def page():
 
@@ -43,6 +44,7 @@ def page():
             st.write("#### Messergebnisse")
             st.write(f"Maximale Herzfrequenz: {st.session_state.person.calc_max_heart_rate()} bpm")
             st.write(f"Durchschnittliche Herzfrequenz: {st.session_state.ekgtest.estimate_hr()} bpm")
+            st.write(f"Herzratenvariabilität: {st.session_state.ekgtest.hrv()} ms")
 
 
 
@@ -59,3 +61,21 @@ def page():
     ## Ekg Plot mit Messwerten anzeigen
     if st.session_state.ekgtest and st.session_state.ekgtest_name[0] != -1:
         st.plotly_chart(st.session_state.ekgtest.plot_time_series(range_ekg[0] + lower, range_ekg[1] + lower))
+
+    ## EKG Löschen
+    if st.session_state.ekgtest_name and st.session_state.ekgtest_name[0] != -1:
+        if st.button("Delete EKG Test"):
+            # Lade den EKG Test
+            ekg_test = EKGData.get_by_id(st.session_state.ekgtest_name[0])
+            # Lösche den EKG Test
+            ekg_test.delete_instance()
+            #lösche den EKG Test aus data/ekg_data
+            os.remove(ekg_test.data)
+            # Aktualisiere die Sitzung
+            st.session_state.ekgtest_name = None
+            st.session_state.ekgtest = None
+            st.success("EKG Test erfolgreich gelöscht!")
+            st.experimental_rerun()
+    else:
+        st.warning("Bitte wählen Sie einen EKG Test aus.")
+
