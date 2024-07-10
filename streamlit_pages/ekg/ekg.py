@@ -101,20 +101,17 @@ class EKGData(Model):
         '''Estimate heart rate based on peaks over 350 mV.'''
         # Identify peaks over 350 mV
         peaks_over_340 = self.df.iloc[self.peaks]
-        
         # Count the number of peaks
         num_peaks = len(peaks_over_340)
-        
         # Calculate the total time in milliseconds
         total_time_ms = self.df['Zeit in ms'].max() - self.df['Zeit in ms'].min()
-        
         # Convert total time to minutes
         total_time_min = total_time_ms / 60000
-        
         # Calculate average heart rate
         hr = int(num_peaks / total_time_min)
         
         return hr
+    
     def hrv(self):
         '''Calculate heart rate variability (HRV) based on peaks.'''
         if self.peaks is None:

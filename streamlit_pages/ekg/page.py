@@ -4,7 +4,7 @@ from streamlit_pages.ekg.edit_masks import new_ekg_test
 import os
 
 def page():
-
+    #Funktionen für die verbindung von Slider und NumInput
     def update_slider():
         st.session_state.slider = (st.session_state.lower_range, st.session_state.upper_range)
 

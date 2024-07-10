@@ -1,14 +1,8 @@
 # Streamlit Heart Rate Analysis App
-this is a test 
+
 ## Projektbeschreibung
 
-Diese Streamlit-App ermöglicht es Ihnen, Ihre Herzfrequenzdaten und EKG-daten zu analysieren und zu visualisieren. Die Anwendung bietet folgende Funktionen:
-
-- Eingabe der maximal gemessenen Herzfrequenz.
-- Erstellung eines interaktiven Plots der Herzfrequenz- und Leistungsdaten.
-- Anzeige der verbrachten Zeit in verschiedenen Herzfrequenzzonen.
-- Anzeige der durchschnittlichen Leistung in jeder Herzfrequenzzone.
-- Analyse der EKG-Daten
+Diese Streamlit-App ermöglicht es Ihnen, Ihre Herzfrequenzdaten und Aktivitätsdaten zu analysieren und zu visualisieren. Die Anwendung bietet folgende Funktionen:
 
 ## Installationd
 

@@ -63,7 +63,6 @@ def new_person():
 
 def edit_person():
     st.write("## Person bearbeiten")
-
     # Erstelle Eingabefelder für jede erforderliche Angabe
     person = st.session_state.editing_person
     firstname = st.text_input("Vorname", value=person.firstname)
@@ -117,6 +116,7 @@ def edit_person():
             st.warning("Bitte füllen Sie alle Felder aus.")
 
 def new_ekg_test():
+    # Create an input field for the EKG data
     ekg_data = st.file_uploader("EKG Data", type=["csv", "txt"])
     person = st.session_state.person
     # Check if the upload button is clicked
@@ -144,6 +144,7 @@ def new_ekg_test():
             st.rerun()
 
 def new_activity_test():
+    # Create an input field for the activity data
     activity_data = st.file_uploader("Aktivitätsdaten", type=["csv"])
     person = st.session_state.person
     # Check if the upload button is clicked

@@ -6,6 +6,7 @@ from streamlit_pages.interactive_plot.power_curve.create_plot_power import creat
 from streamlit_pages.interactive_plot.activity import Activity
 from streamlit_pages.ekg.edit_masks import new_activity_test
 import os
+
 def page():
     activities = st.session_state.person.get_activity_names()
     activities.append((-1, 'Neuen Test hinzufügen'))
@@ -21,8 +22,6 @@ def page():
     if st.session_state.aktivity_name and st.session_state.aktivity_name[0] == -1:
         new_activity_test()
             
-    
-    
     if st.session_state.aktivity_name and st.session_state.aktivity_name[0] != -1:
         
         tab_heartrate,tab_powercurve = st.tabs(["Powerzones", "Power Curve"])

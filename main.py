@@ -8,12 +8,15 @@ from streamlit_pages.ekg.edit_masks import new_person , edit_person
 
 
 if __name__ == "__main__":
+    #Initializes the database if empty
     init()
 
+    #Sidebar
     with st.sidebar:
         st.sidebar.title("StreamBoard")
         sidebar_page()
 
+    #Pages
     if st.session_state.page == "main":
         tab_ekg, tab_activity = st.tabs(["EKG", "Aktivitätsdaten"])
         with tab_ekg:

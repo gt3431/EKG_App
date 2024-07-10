@@ -3,8 +3,10 @@ from streamlit_pages.ekg.person import Person
 from PIL import Image
 
 def page():
-    Person.get_person_name_list()
-    # Lade die Liste der Personen und füge "test" hinzu
+    #
+    #   Display the sidebar with the person selection
+    #
+    
     persons = Person.get_person_name_list()
 
     st.session_state.person_name = st.selectbox(

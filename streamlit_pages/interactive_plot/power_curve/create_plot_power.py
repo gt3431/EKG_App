@@ -29,7 +29,6 @@ def create_power_curve(power_series, time_beween_samples=1, resolution_watts=1, 
     df = pd.DataFrame(data, columns=['Leistung', 'Maximale Zeit'])
     return df
 
-
 def create_plot_power_curve(power_curve_df):
     fig = go.Figure()
     fig.add_trace(go.Scatter(
